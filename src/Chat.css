@@ -1,0 +1,81 @@
+/* Устанавливаем чёрный фон на всю страницу */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    color: white;
+    font-family: 'Source Code Pro', monospace;
+    height: 100vh;
+    overflow: hidden; /* Убираем прокрутку страницы */
+  }
+  
+  .chat-container {
+    background-color: #121212; /* Чёрный фон чата */
+    color: #ffffff;
+    height: 80vh;
+    width: 60%;
+    margin: 20px auto;
+    border-radius: 10px;
+    padding: 300px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  }
+  
+  .profile-info {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  /* Окно сообщений */
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+  }
+  
+  .message {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #1e1e1e;
+  }
+  
+  /* Контейнер ввода сообщений */
+  .chat-input-container {
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid #333;
+  }
+  
+  /* Поле ввода сообщений */
+  .chat-input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2b2b2b;
+    color: white;
+    margin-right: 10px;
+  }
+  
+  .chat-input::placeholder {
+    color: #888888;
+  }
+  
+  /* Кнопки */
+  .chat-button {
+    background-color: #ffffff;
+    color: #121212;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .chat-button:hover {
+    background-color: #333333;
+  }
+  
