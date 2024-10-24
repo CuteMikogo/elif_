@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { verifyInviteCode, verifyProfileCode, isNicknameUnique, saveUser, db } from './firebase';
+import { verifyInviteCode, verifyProfileCode, isNicknameUnique, saveUser, db, deleteInviteCode } from './firebase';
 import { 
   ref, 
   get, 
@@ -31,47 +31,25 @@ const JoinChat = ({ onJoin }) => {
     e.preventDefault();
   
     try {
-      const userId = await saveUser(nickname); // Сохраняем или получаем userId
-      console.log("userId сохранён:", userId); // Проверка
+      if (inviteCode) {
+        // Проверяем код приглашения
+        const isValidCode = await verifyInviteCode(inviteCode);
+        if (!isValidCode) {
+          setError('Неверный код приглашения.');
+          return;
+        }
   
+        // Удаляем код после его использования
+        await deleteInviteCode(inviteCode);
+      }
+  
+      const { userId, profileCode } = await saveUser(nickname);
+      localStorage.setItem('userId', userId); // Сохраняем userId в localStorage
       onJoin(nickname); // Переход в чат
     } catch (error) {
       setError('Ошибка при сохранении пользователя. Попробуйте снова.');
       console.error('Ошибка при входе:', error);
     }
-  
-  
-    if (profileCode) {
-      // Поиск пользователя по userId
-      const userRef = ref(db, `users/${profileCode}`);
-      const snapshot = await get(userRef);
-  
-      if (snapshot.exists()) {
-        const userData = snapshot.val();
-        onJoin(userData.nickname); // Авторизация успешна
-        return;
-      } else {
-        setError('Неверный код профиля.');
-        return;
-      }
-    }
-  
-    const isValid = await verifyInviteCode(inviteCode);
-    if (!isValid) {
-      setError('Неверный код приглашения.');
-      return;
-    }
-  
-    const uniqueNickname = await isNicknameUnique(nickname);
-    if (!uniqueNickname) {
-      setError('Этот ник уже используется. Пожалуйста, выберите другой.');
-      return;
-    }
-  
-    const userId = await saveUser(nickname);
-    localStorage.setItem('userId', userId); // Сохраняем userId в localStorage
-  
-    onJoin(nickname);
   };
 
   return (

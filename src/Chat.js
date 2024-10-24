@@ -1,32 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { db, saveUser, generateInviteCode } from './firebase';
-import { push, ref, onValue } from 'firebase/database';
+import { db, saveUser, generateInviteCode, generateProfileCode } from './firebase';
+import { push, ref, onValue, set } from 'firebase/database';
 import './Chat.css'; // Импорт стилей
 
 const Chat = ({ nickname }) => {
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(''); // Используем input для обработки сообщений
   const [inviteCode, setInviteCode] = useState('');
   const [profileCode, setProfileCode] = useState('');
-  const [message, setMessage] = useState(''); // Ваша переменная 'message'
 
   useEffect(() => {
-    // Получение сообщений из базы данных
+    const updateUserProfile = async () => {
+      try {
+        const { profileCode } = await saveUser(nickname); // вызываем saveUser, который обновит профиль и вернёт новый код
+        setProfileCode(profileCode); // устанавливаем обновлённый код профиля
+      } catch (error) {
+        console.error('Ошибка обновления профиля:', error);
+      }
+    };
+  
+    updateUserProfile(); // обновляем профиль при монтировании компонента
+  
     const messagesRef = ref(db, 'messages');
     const unsubscribe = onValue(messagesRef, (snapshot) => {
       const data = snapshot.val();
       setMessages(data ? Object.values(data) : []);
     });
-
-    // Загрузка личного кода профиля
-    const code = generateInviteCode();
-    setProfileCode(code);
-
-    return () => unsubscribe(); // Отписка при размонтировании
-  }, []);
+  
+    return () => unsubscribe(); // отписка при размонтировании
+  }, [nickname]);
 
   const sendMessage = async () => {
-    if (!input) {
+    if (!input.trim()) {
       alert('Введите сообщение!');
       return;
     }
@@ -45,28 +50,35 @@ const Chat = ({ nickname }) => {
     }
   };
 
-  const generateCode = () => {
-    const code = generateInviteCode();
-    setInviteCode(code);
+  const generateCode = async () => {
+    const code = generateInviteCode(); // Генерация нового кода
+    setInviteCode(code); // Установка кода в локальный state
+  
+    try {
+      // Сохраняем код приглашения в базе данных
+      const inviteRef = ref(db, `inviteCode/${code}`);
+      await set(inviteRef, {
+        available: true, // Код доступен для использования
+        createdAt: Date.now(), // Время создания
+      });
+  
+      console.log('Код приглашения успешно сгенерирован и сохранён:', code);
+    } catch (error) {
+      console.error('Ошибка при сохранении кода приглашения:', error);
+    }
   };
+
+  
 
   const logout = () => {
     localStorage.removeItem('userId'); // Удаляем ID из LocalStorage
     window.location.reload(); // Перезагружаем страницу для выхода
   };
 
-  const handleSendMessage = () => {
-    if (message.trim() === '') return; // Проверка на пустое сообщение
-
-    sendMessage(nickname, message); // Отправка сообщения
-    setMessage(''); // Очистка поля ввода после отправки
-  };
-
-  // Функция для обработки нажатия клавиши
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault(); // Чтобы Enter не добавлял новую строку
-      handleSendMessage();
+      sendMessage(); // Отправка сообщения
     }
   };
 
@@ -76,7 +88,7 @@ const Chat = ({ nickname }) => {
 
       <div className="profile-info">
         <p><strong>Ваш код профиля:</strong> {profileCode}</p>
-        <button className="chat-button" onClick={generateInviteCode}>
+        <button className="chat-button" onClick={generateCode}>
           Сгенерировать код приглашения
         </button>
         {inviteCode && <p>Код приглашения: {inviteCode}</p>}
@@ -100,6 +112,7 @@ const Chat = ({ nickname }) => {
           placeholder="Введите сообщение"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyPress={handleKeyPress} // Добавляем обработчик Enter
         />
         <button className="chat-button" onClick={sendMessage}>
           Отправить

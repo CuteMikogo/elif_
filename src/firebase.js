@@ -27,20 +27,37 @@ export const generateProfileCode = () => Math.random().toString(36).substring(2,
 // Сохранение пользователя в базе данных
 export const saveUser = async (nickname) => {
   try {
-    const userId = uuidv4(); // Генерация уникального ID
-    const inviteCode = Math.random().toString(36).substring(2, 8); // Генерация кода
+    let userId = localStorage.getItem('userId'); // Проверяем, есть ли сохранённый ID
 
-    const userRef = ref(db, `users/${userId}`); // Путь в Firebase
+    if (!userId) {
+      userId = uuidv4(); // Если его нет, создаём новый
+      localStorage.setItem('userId', userId); // Сохраняем в localStorage
+    }
 
-    // Записываем данные пользователя
+    const profileCode = generateProfileCode(); // Генерируем новый код профиля
+    const userRef = ref(db, `users/${userId}`);
+
+    // Проверяем, не существует ли уже запись с этим userId
+    const snapshot = await get(userRef);
+    if (snapshot.exists()) {
+      const userData = snapshot.val();
+      
+      // Обновляем код профиля при каждом входе
+      await set(userRef, { ...userData, profileCode });
+      console.log("Профиль обновлен с новым кодом профиля:", profileCode);
+
+      return { userId, profileCode }; // Возвращаем обновлённые данные
+    }
+
+    // Если запись отсутствует, создаём новую
     await set(userRef, { 
       userId, 
       nickname, 
-      inviteCode 
+      profileCode 
     });
 
-    console.log("Пользователь успешно сохранён:", { userId, nickname, inviteCode });
-    return userId;
+    console.log("Пользователь успешно сохранён:", { userId, nickname, profileCode });
+    return { userId, profileCode };
   } catch (error) {
     console.error("Ошибка при сохранении пользователя:", error);
     throw error;
@@ -63,11 +80,17 @@ export const verifyProfileCode = async (code) => {
 
 // Проверка кода приглашения
 export const verifyInviteCode = async (code) => {
-  const snapshot = await get(ref(db, `inviteCode/${code}`)); // ищем в inviteCode по коду
+  const inviteRef = ref(db, `inviteCode/${code}`);
+  const snapshot = await get(inviteRef); // ищем в inviteCodes по коду
   if (!snapshot.exists()) return false;
 
   const inviteData = snapshot.val();
-  return inviteData.available === true;
+  if (inviteData.available === true) {
+    // Помечаем код как использованный
+    await set(inviteRef, { ...inviteData, available: false });
+    return true;
+  }
+  return false;
 };
 
 
@@ -78,4 +101,14 @@ export const isNicknameUnique = async (nickname) => {
   return !Object.values(users).some((user) => user.nickname === nickname);
 };
 
+export const deleteInviteCode = async (code) => {
+  try {
+    const inviteRef = ref(db, `inviteCode/${code}`);
+    await set(inviteRef, null); // Удаляем код из базы данных
+    console.log(`Код приглашения ${code} был удалён из базы данных.`);
+  } catch (error) {
+    console.error("Ошибка при удалении кода приглашения:", error);
+    throw error;
+  }
+};
 export { db };
