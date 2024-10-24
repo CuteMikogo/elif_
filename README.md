@@ -17,3 +17,10 @@ The chat style has been changed to a dark theme
 
 Добавлена возможность отправки сообщений на Enter
 
+# Ссылка на сайт
+
+https://elif-cutemikogos-projects.vercel.app
+
+#Инвайт коды
+
+1maegp 5xsiq7 zvzewi ovj3i2 rql5de yanxnd
