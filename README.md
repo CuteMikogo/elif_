@@ -1,7 +1,5 @@
 # elif_ messenger
-elif is an open source anonymous chat.
-
-In elif_ there is a single general chat, which you can access with only an invitation code from the user of this chat.
+Это открытый анонимный мессенджер с открытым исходным кодом.
 
 # Beta v0.1
 
@@ -9,17 +7,27 @@ The login menu style has been changed to a dark theme
 
 The chat style has been changed to a dark theme
 
-# How to install
-1. Download and move the downloaded files to the path C:\Users\UserName
-2. Download node_modules from google drive: https://drive.google.com/file/d/1kVD34_8k-4kKgLE5opg-VCkOuD5AKXQ-/view?usp=sharing
-3. Move node_modules to the root folder where you moved the program
-4. Download Node.js 20.18.0(LTS) https://nodejs.org/en/download/prebuilt-installer
-5. Open cmd and write the following commands:
+# Beta v0.2
+
+Исправлена кнопка создания кода приглашения.
+
+Исправлен баг с кодом профиля.
+
+Добавлена возможность заходить используя код профиля
+
+Добавлена возможность отправки сообщений на Enter
+
+# Как установить
+1. Скачайте и переместите все файлы по данному пути, предварительно создав для скачаных файлов папку C:\Users\UserName
+2. Скачайте node_modules из Google Drive: https://drive.google.com/file/d/1kVD34_8k-4kKgLE5opg-VCkOuD5AKXQ-/view?usp=sharing
+3. Переместите node_modules в папку с файлами программы
+4. Скачайте Node.js 20.18.0(LTS) https://nodejs.org/en/download/prebuilt-installer
+5. Откройте cmd и пишите по очереди следующие команды:
 
    cd NameYourFolder
    
    npm start
    
-Your browser should open a localhost tab
+Ваш браузер должен открыть вкладку localhost
 
-If you don't have an invitation code, request one from the creator or user of this chat 
+Есои у вас нет кода приглашения, вы можете запросить его у создателя
