@@ -19,10 +19,9 @@ The chat style has been changed to a dark theme
 
 # Как установить
 1. Скачайте и переместите все файлы по данному пути, предварительно создав для скачаных файлов папку C:\Users\UserName
-2. Скачайте node_modules из Google Drive: https://drive.google.com/file/d/1kVD34_8k-4kKgLE5opg-VCkOuD5AKXQ-/view?usp=sharing
-3. Переместите node_modules в папку с файлами программы
-4. Скачайте Node.js 20.18.0(LTS) https://nodejs.org/en/download/prebuilt-installer
-5. Откройте cmd и пишите по очереди следующие команды:
+2. Переместите node_modules в папку с файлами программы
+3. Скачайте Node.js 20.18.0(LTS) https://nodejs.org/en/download/prebuilt-installer
+4. Откройте cmd и пишите по очереди следующие команды:
 
    cd NameYourFolder
    
