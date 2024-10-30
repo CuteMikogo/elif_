@@ -108,7 +108,15 @@ const Chat = ({ nickname }) => {
           onKeyPress={handleKeyPress}
           ref={inputRef} // Применяем реф к полю ввода
         />
-        <button className="chat-button" onClick={sendMessage}>Отправить</button>
+        <button
+  className="chat-button"
+  onClick={() => {
+    sendMessage();
+    inputRef.current.focus(); // Восстанавливаем фокус на поле ввода
+  }}
+>
+  Отправить
+</button>
       </div>
     </div>
   );
