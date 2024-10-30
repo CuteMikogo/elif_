@@ -219,17 +219,17 @@ body.light-theme, .light-theme .chat-container, .light-theme .join-container {
 /* Ещё меньшее отображение профиля для мобильных */
 @media (max-width: 768px) {
   .profile-info {
-    font-size: 10px; /* Уменьшение размера текста в контейнере профиля */
-    padding: 2px; /* Минимизация отступов */
+    font-size: 10px !important; /* Уменьшение размера текста с приоритетом */
+    padding: 2px !important; /* Минимизация отступов */
   }
 
   .profile-info p {
-    font-size: 10px; /* Уменьшение шрифта для текста кода профиля */
-    margin: 2px 0; /* Минимальные отступы */
+    font-size: 10px !important; /* Уменьшение шрифта для текста кода профиля */
+    margin: 2px 0 !important; /* Минимальные отступы */
   }
 
   .profile-info .chat-button {
-    padding: 5px 8px; /* Уменьшение размера кнопки */
-    font-size: 10px; /* Ещё меньше шрифт кнопки */
+    padding: 5px 8px !important; /* Уменьшение размера кнопки */
+    font-size: 10px !important; /* Ещё меньше шрифт кнопки */
   }
 }
