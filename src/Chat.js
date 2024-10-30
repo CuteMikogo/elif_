@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { db, saveUser, generateInviteCode } from './firebase';
-import { push, ref, onValue, set } from 'firebase/database';
-import './Chat.css';
 
 const Chat = ({ nickname }) => {
   const [messages, setMessages] = useState([]);
@@ -10,16 +7,16 @@ const Chat = ({ nickname }) => {
   const [profileCode, setProfileCode] = useState('');
   const [isDarkTheme, setIsDarkTheme] = useState(true);
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null); // Создаем реф для поля ввода
 
   useEffect(() => {
-    // Применяем стили при смене темы
     document.body.className = isDarkTheme ? 'dark-theme' : 'light-theme';
     if (isDarkTheme) {
-      document.body.style.backgroundColor = '#121212'; // темный фон
-      document.body.style.color = '#ffffff'; // светлый текст
+      document.body.style.backgroundColor = '#121212';
+      document.body.style.color = '#ffffff';
     } else {
-      document.body.style.backgroundColor = '#ffffff'; // светлый фон
-      document.body.style.color = '#000000'; // темный текст
+      document.body.style.backgroundColor = '#ffffff';
+      document.body.style.color = '#000000';
     }
   }, [isDarkTheme]);
 
@@ -43,7 +40,7 @@ const Chat = ({ nickname }) => {
       setMessages(data ? Object.values(data) : []);
     });
 
-    return () => unsubscribe(); 
+    return () => unsubscribe();
   }, [nickname]);
 
   useEffect(() => {
@@ -51,47 +48,24 @@ const Chat = ({ nickname }) => {
   }, [messages]);
 
   const sendMessage = async () => {
-  if (!input.trim()) {
-    alert('Введите сообщение!');
-    return;
-  }
-
-  try {
-    const messagesRef = ref(db, 'messages');
-    await push(messagesRef, {
-      text: input,
-      sender: nickname,
-      timestamp: Date.now(),
-    });
-    setInput('');
-    document.querySelector('.chat-input').focus(); // Устанавливаем фокус на поле ввода после отправки
-  } catch (error) {
-    console.error('Ошибка отправки сообщения:', error);
-    alert('Не удалось отправить сообщение.');
-  }
-};
-
-
-  const generateCode = async () => {
-    const code = generateInviteCode();
-    setInviteCode(code);
+    if (!input.trim()) {
+      alert('Введите сообщение!');
+      return;
+    }
 
     try {
-      const inviteRef = ref(db, `inviteCode/${code}`);
-      await set(inviteRef, {
-        available: true,
-        createdAt: Date.now(),
+      const messagesRef = ref(db, 'messages');
+      await push(messagesRef, {
+        text: input,
+        sender: nickname,
+        timestamp: Date.now(),
       });
-
-      console.log('Код приглашения успешно сгенерирован и сохранён:', code);
+      setInput('');
+      inputRef.current.focus(); // Устанавливаем фокус на поле ввода
     } catch (error) {
-      console.error('Ошибка при сохранении кода приглашения:', error);
+      console.error('Ошибка отправки сообщения:', error);
+      alert('Не удалось отправить сообщение.');
     }
-  };
-
-  const logout = () => {
-    localStorage.removeItem('userId');
-    window.location.reload();
   };
 
   const handleKeyPress = (e) => {
@@ -132,6 +106,7 @@ const Chat = ({ nickname }) => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}
+          ref={inputRef} // Применяем реф к полю ввода
         />
         <button className="chat-button" onClick={sendMessage}>Отправить</button>
       </div>
