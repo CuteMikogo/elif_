@@ -51,24 +51,26 @@ const Chat = ({ nickname }) => {
   }, [messages]);
 
   const sendMessage = async () => {
-    if (!input.trim()) {
-      alert('Введите сообщение!');
-      return;
-    }
+  if (!input.trim()) {
+    alert('Введите сообщение!');
+    return;
+  }
 
-    try {
-      const messagesRef = ref(db, 'messages');
-      await push(messagesRef, {
-        text: input,
-        sender: nickname,
-        timestamp: Date.now(),
-      });
-      setInput('');
-    } catch (error) {
-      console.error('Ошибка отправки сообщения:', error);
-      alert('Не удалось отправить сообщение.');
-    }
-  };
+  try {
+    const messagesRef = ref(db, 'messages');
+    await push(messagesRef, {
+      text: input,
+      sender: nickname,
+      timestamp: Date.now(),
+    });
+    setInput('');
+    document.querySelector('.chat-input').focus(); // Устанавливаем фокус на поле ввода после отправки
+  } catch (error) {
+    console.error('Ошибка отправки сообщения:', error);
+    alert('Не удалось отправить сообщение.');
+  }
+};
+
 
   const generateCode = async () => {
     const code = generateInviteCode();
