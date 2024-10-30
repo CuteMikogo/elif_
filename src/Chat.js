@@ -48,25 +48,25 @@ const Chat = ({ nickname }) => {
   }, [messages]);
 
   const sendMessage = async () => {
-    if (!input.trim()) {
-      alert('Введите сообщение!');
-      return;
-    }
+  if (!input.trim()) {
+    alert('Введите сообщение!');
+    return;
+  }
 
-    try {
-      const messagesRef = ref(db, 'messages');
-      await push(messagesRef, {
-        text: input,
-        sender: nickname,
-        timestamp: Date.now(),
-      });
-      setInput('');
-      inputRef.current.focus(); // Устанавливаем фокус на поле ввода
-    } catch (error) {
-      console.error('Ошибка отправки сообщения:', error);
-      alert('Не удалось отправить сообщение.');
-    }
-  };
+  try {
+    const messagesRef = ref(db, 'messages');
+    await push(messagesRef, {
+      text: input,
+      sender: nickname,
+      timestamp: Date.now(),
+    });
+    setInput('');                 // Очищаем поле ввода
+    inputRef.current.focus();      // Восстанавливаем фокус после отправки
+  } catch (error) {
+    console.error('Ошибка отправки сообщения:', error);
+    alert('Не удалось отправить сообщение.');
+  }
+};
 
   const handleKeyPress = (e) => {
   if (e.key === 'Enter') {
@@ -111,11 +111,7 @@ const Chat = ({ nickname }) => {
         />
         <button
   className="chat-button"
-  onClick={(e) => {
-    e.preventDefault();      // Предотвращаем потерю фокуса
-    sendMessage();
-    inputRef.current.focus(); // Устанавливаем фокус обратно на поле ввода
-  }}
+  onClick={() => sendMessage()}
 >
   Отправить
 </button>
