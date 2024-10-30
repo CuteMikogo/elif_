@@ -216,15 +216,20 @@ body.light-theme, .light-theme .chat-container, .light-theme .join-container {
   margin: 5px 0; /* Отступы между метками */
 }
 
-/* Адаптация размеров профиля для мобильных */
+/* Адаптация профиля для мобильных */
 @media (max-width: 768px) {
-  .profile-info p {
-    font-size: 12px; /* Уменьшение шрифта */
-    margin: 5px 0; /* Уменьшение отступов */
+  .profile-info {
+    font-size: 12px; /* Уменьшение размера текста профиля */
+    padding: 5px; /* Уменьшение отступов */
   }
-  
+
+  .profile-info p {
+    font-size: 14px; /* Уменьшение шрифта текста */
+    margin: 3px 0; /* Уменьшение отступов */
+  }
+
   .profile-info .chat-button {
-    padding: 8px 15px; /* Уменьшение кнопки */
-    font-size: 14px; /* Уменьшение шрифта кнопки */
+    padding: 6px 10px; /* Уменьшение кнопки */
+    font-size: 12px; /* Уменьшение шрифта кнопки */
   }
 }
