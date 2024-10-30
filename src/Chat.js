@@ -69,11 +69,12 @@ const Chat = ({ nickname }) => {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      sendMessage();
-    }
-  };
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    sendMessage();
+    inputRef.current.focus(); // Устанавливаем фокус обратно после отправки
+  }
+};
 
   return (
     <div className="chat-container">
@@ -110,9 +111,10 @@ const Chat = ({ nickname }) => {
         />
         <button
   className="chat-button"
-  onClick={() => {
+  onClick={(e) => {
+    e.preventDefault();      // Предотвращаем потерю фокуса
     sendMessage();
-    inputRef.current.focus(); // Восстанавливаем фокус на поле ввода
+    inputRef.current.focus(); // Устанавливаем фокус обратно на поле ввода
   }}
 >
   Отправить
