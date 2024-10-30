@@ -17,6 +17,14 @@ The chat style has been changed to a dark theme
 
 Добавлена возможность отправки сообщений на Enter
 
+# Beta v0.3
+
+Улучшен стиль чата
+
+Добавлена адаптация под мобильную версию чата
+
+Добавлена кнопка смены темы на светлую и тёмную
+
 # Ссылка на сайт
 
 https://elif-cutemikogos-projects.vercel.app
