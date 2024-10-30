@@ -77,15 +77,7 @@ const Chat = ({ nickname }) => {
 };
 
   return (
-    <input
-  ref={inputRef}              // Привязываем реф
-  className="chat-input"
-  type="text"
-  placeholder="Введите сообщение"
-  value={input}
-  onChange={(e) => setInput(e.target.value)}
-  onKeyPress={handleKeyPress}
-/>
+    
     <div className="chat-container">
       <button className="theme-switch" onClick={toggleTheme}>
         {isDarkTheme ? 'Светлая тема' : 'Темная тема'}
@@ -110,13 +102,13 @@ const Chat = ({ nickname }) => {
 
       <div className="chat-input-container">
         <input
+          ref={inputRef}              // Привязываем реф
           className="chat-input"
           type="text"
           placeholder="Введите сообщение"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}
-          ref={inputRef} // Применяем реф к полю ввода
         />
         <button
   className="chat-button"
