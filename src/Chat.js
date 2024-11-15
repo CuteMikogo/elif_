@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { db, saveUser, generateInviteCode } from './firebase';
+import { push, ref, onValue, set } from 'firebase/database';
+import './Chat.css';
 
 const Chat = ({ nickname }) => {
   const [messages, setMessages] = useState([]);
